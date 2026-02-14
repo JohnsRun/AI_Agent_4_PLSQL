@@ -1,6 +1,6 @@
 # Prompt:
 
-Follow rules in #file:v7_Instruction_SP_Investigation.md and analyze get_hours() in #file:JTA_Packages.sql
+Follow rules in #file:SKILL.md and analyze get_hours() in #file:JTA_Packages.sql
 
 
 
