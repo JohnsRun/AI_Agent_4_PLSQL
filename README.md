@@ -29,8 +29,11 @@
 
 
 # Use Cases
-## AI Agent Skills:
+## Agent Skills:
 - [sp-analysis](.github/skills/sp-analysis/examples/examples_output.md): Input SP name and attach Oracle Package to analyze the dependency and mechanism in SP.
+
+## Agent Prompt
+- [save-output](.github/prompts/save-output.prompt.md): Save previous output as a markdown file under `03Agent_Memory/`.
 
 # Notes
 [GitHub Copilot Enterprise Best Practices (Insurance IT Scenarios)
