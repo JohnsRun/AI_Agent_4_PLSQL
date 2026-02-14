@@ -2,6 +2,7 @@
 name: sp-analysis
 description: You are an expert in Oracle SQL. Search the SP (Stored Procedure) name from the chatbox in the SQL package and analyze. LLM base model temperature should be 0. Analyze the data flow of Oracle stored procedures (SPs) within a package, showing complete dependency chains from Upstream SP to downstream SP. And then show the target SP details. Ensure no steps are skipped, and all relevant SPs are included.
 argument-hint: Input [SP Name] and attach [Package File]
+version: v1.0
 ---
 
 # Skill Instructions
@@ -104,8 +105,8 @@ argument-hint: Input [SP Name] and attach [Package File]
     ## 4.Final Output
     Returns fd to caller; no table writes occur, exceptions are logged through jta_error.gd.
     - Every bullet in sections 1-4 must end with a clickable reference such as `[JTA_Packages.sql:255-263](Demo_GC_Usage/03Development_Zone/Oracle_Package/JTA_Packages.sql#L255-L263)` that points to the relevant lines in the package (workspace-relative path).
-
-    # Body Script of *PROCEDURE_NAME()*
+    ----
+    # #3 Body Script of *PROCEDURE_NAME()*
     ```
     Create Procedure
 
