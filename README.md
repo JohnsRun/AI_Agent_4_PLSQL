@@ -41,8 +41,7 @@
 - [save-output](.github/prompts/save-output.prompt.md): Save previous output as a markdown file under `03Agent_Memory/`.
 
 # #3 Notes
-[AI Agent for PL/SQL Best Practices (VS Code)v
-](Copilot_Best_Practices.ipynb)
+[AI Agent for PL/SQL Best Practices (VS Code)](AI_Agent_4PLSQL_Best_Practices.ipynb)
 
 
 
