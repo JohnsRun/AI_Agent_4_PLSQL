@@ -5,19 +5,24 @@
 
 # #1 Dependency Analysis: *get_hours()* in *jta*
 
-## 1.Upstream SP
-- ***process_payroll()*** 
-    - Reads: work_hours, staff  
-    - Invoking: get_hours(current_staff.staff_id, v_start_date, v_end_date, basic, overtime, doubletime); [JTA_Packages.sql:353](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L353)  
-- ***get_date()***
-    - Reads: DUAL [JTA_Packages.sql:353](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L653)  
-    - Writes: None  
-## 2.Downstream SP
-    - ***fd_ud()*** [JTA_Packages.sql:1134-1140](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L1134-L1140)
-    - ***fd_fdud()*** [JTA_Packages.sql:1134-1140](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L1134-L1140)
+#### Upstream Procedures
+1. **`get_profits_for`**
+    - **Call Line**: `get_hours(current_staff.staff_id, v_start_date, v_end_date, basic, overtime, doubletime);` [JTA_Packages.sql:353](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L353)  
+    - **Procedure Body**: [JTA_Packages.sql:904-963](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L904-963 )  
+    - **Reads**: `work_hours`, `staff`  
+2. ***get_date()*** 
+    - **Call Line**: `get_hours(current_staff.staff_id, v_start_date, v_end_date, basic, overtime, doubletime);` [JTA_Packages.sql:359](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L359)  
+    - **Procedure Body**: [JTA_Packages.sql:984-993](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L984-993 ) 
+    - **Reads**: DUAL [JTA_Packages.sql:353](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L653) 
+#### Downstream Procedures
+1. **`fd_ud()`**
+   - **Call Line**: [fd_ud(v1,v2)](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L301)
+   - **Reads**: `work_hours`.
+   - **Procedure Body**: [JTA_Packages.sql:255](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L255)
+
 ----
 
-# #2 Mechanism Analysis for *get_date()*
+#### Mechanism Analysis for *get_date()*
 
 ## 1.Preparation
 - Input Parameters: `p_local_time OUT NOCOPY DATE` [JTA_Packages.sql:1119-1126](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L1119-L1126)

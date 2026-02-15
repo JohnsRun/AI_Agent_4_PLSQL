@@ -3,8 +3,8 @@
 .
 ├── README.md
 ├──.github/
+│   ├── copilot-instructions.md
 │   ├── instructions/
-│   │   └── copilot-instructions.instruction.md
 │   ├── skills/
 │       └── sp-analysis/
 │           ├── SKILL.md
@@ -41,7 +41,7 @@
 - [save-output](.github/prompts/save-output.prompt.md): Save previous output as a markdown file under `03Agent_Memory/`.
 
 # #3 Notes
-[GitHub Copilot Enterprise Best Practices (Insurance IT Scenarios)
+[AI Agent for PL/SQL Best Practices (VS Code)v
 ](Copilot_Best_Practices.ipynb)
 
 

@@ -23,35 +23,41 @@ version: v1.0
    - Treat these as UPSTREAM SPs.
    - For each upstream SP, extract:
      - SP name
-     - Tables READ
      - Invoking command
+    - Procedure Body range in package body
+    - Tables READ
     - Include a clickable reference such as `[JTA_Packages.sql:255-263](Demo_GC_Usage/03Development_Zone/Oracle_Package/JTA_Packages.sql#L255-L263)` so VS Code can jump directly to the lines where the call occurs (use workspace-relative paths).
     - The `255-263` range must be the **true** line range in the current file version.
 
-3. Analyze the target SP body.
-   - Extract tables READ and WRITTEN by the target SP.
+3. Analyze the target SP body for Mechanism Analysis.
+    - Break down the SP body into logical sections (e.g., Preparation, Data Loading, Transformations, Output).
+    - For each section, summarize the key operations and data flow.
+    - Every bullet ends with a clickable reference such as `[JTA_Packages.sql:255-263](Demo_GC_Usage/03Development_Zone/Oracle_Package/JTA_Packages.sql#L255-L263)` that points to the relevant lines in the package (workspace-relative path).
+
 
 4. Within the target SP body, identify any SPs that the target SP CALLS.
-   - Treat these as DOWNSTREAM SPs.
-    - Extract: SP name and add a clickable reference like `[JTA_Packages.sql:255-263](Demo_GC_Usage/03Development_Zone/Oracle_Package/JTA_Packages.sql#L255-L263)` showing where the downstream call is coded (workspace-relative path)
+    - Treat these as DOWNSTREAM SPs.
+    - Extract for each downstream SP:
+      - SP name
+      - Call Line
+      - Procedure Body location/range
+      - Tables READ
+    - Add clickable references like `[DOWNSTREAM(v1,v2)](Demo_GC_Usage/03Development_Zone/Oracle_Package/JTA_Packages.sql#L255-L263)` for call lines and body locations (workspace-relative path), ensuring the call line is in the [] and matches the actual call statement line in the package body.
     - The reference range must map to the exact call statement in the package body.
 
 5. If Upstream SP or Downstream SP are null, double-check to avoid mistakes and use --None-- to indicate no Upstream SP or Downstream SP.
     - When value is `--None--`, do **not** append line numbers or markdown links to that `--None--` entry.
     - Do **not** add empty braces/objects such as `{}` for missing Upstream/Downstream items.
     - Examples:
+    ```
+    #### Upstream Procedures
+    - None
 
-    ```
-    Upstream SP
-        - None
-    ```
-    
-    ```
-    Downstream SP
-        - None
+    #### Downstream Procedures
+    - None
     ```
 
-6. Assemble the results using markdown headings exactly in this style (match example header format): `# #1 Dependency Analysis: *PROCEDURE_NAME()* in *PACKAGE_NAME*`, `## 1.Upstream SP`, `## 2.Downstream SP`, `# #2 Mechanism Analysis for *PROCEDURE_NAME()*`.
+6. Assemble the results using markdown headings exactly in this style (match example header format): `# #1 Dependency Analysis: *PROCEDURE_NAME()* in *PACKAGE_NAME*`, `#### Upstream Procedures`, `#### Downstream Procedures`, `# #2 Mechanism Analysis for *PROCEDURE_NAME()*`.
     - Use list/bullet formatting for procedures and details (no tree connectors).
     - Use `None` exactly for missing items in this section format.
 
@@ -71,25 +77,21 @@ version: v1.0
 
     # #1 Dependency Analysis: *PROCEDURE_NAME()* in *PACKAGE_NAME*
 
-    ## 1.Upstream SP
-    - PROCEDURE_A
-        - Reads: TABLE_1, TABLE_2
-        - Invoking: jta.PROCEDURE_NAME(v_d_time); [JTA_Packages.sql:255](Demo_GC_Usage/03Development_Zone/Oracle_Package/JTA_Packages.sql#L255)
-    - PROCEDURE_B
-        - Reads: INTERMEDIATE_TABLE_1, TABLE_3
-        - Invoking: jta.PROCEDURE_NAME(v_ntc_time); [JTA_Packages.sql:263](Demo_GC_Usage/03Development_Zone/Oracle_Package/JTA_Packages.sql#L263)
+    #### Upstream Procedures
+    1. **`PROCEDURE_A`**
+        - **Call Line**: `jta.PROCEDURE_NAME(v_d_time);` [JTA_Packages.sql:255](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L255)
+        - **Procedure Body**: [JTA_Packages.sql:240-310](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L240-L310)
+        - **Reads**: `TABLE_1`, `TABLE_2`
+    2. **`PROCEDURE_B`**
+        - **Call Line**: `jta.PROCEDURE_NAME(v_ntc_time);` [JTA_Packages.sql:263](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L263)
+        - **Procedure Body**: [JTA_Packages.sql:500-560](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L500-L560)
+        - **Reads**: `INTERMEDIATE_TABLE_1`, `TABLE_3`
 
-    ## 2.Downstream SP
-        - PROCEDURE_C [JTA_Packages.sql:301](Demo_GC_Usage/03Development_Zone/Oracle_Package/JTA_Packages.sql#L301)
-        - PROCEDURE_D [JTA_Packages.sql:309](Demo_GC_Usage/03Development_Zone/Oracle_Package/JTA_Packages.sql#L309)
-        - PROCEDURE_E [JTA_Packages.sql:317](Demo_GC_Usage/03Development_Zone/Oracle_Package/JTA_Packages.sql#L317)
-
-    If none exists:
-    ## 1.Upstream SP
-    - None
-
-    ## 2.Downstream SP
-    - None
+    #### Downstream Procedures
+    1. **`PROCEDURE_C()`**
+        - **Call Line**: [PROCEDURE_C(v2)](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L312)
+        - **Procedure Body**: [JTA_Packages.sql:301-340](../02Development_Zone/Oracle_Package/JTA_Packages.sql#L301-L340)
+        - **Reads**: `work_hours`
     ----
     # #2 Mechanism Analysis for *PROCEDURE_NAME()*
     ## 1.Preparation
@@ -104,7 +106,6 @@ version: v1.0
     - 3)....
     ## 4.Final Output
     Returns fd to caller; no table writes occur, exceptions are logged through jta_error.gd.
-    - Every bullet in sections 1-4 must end with a clickable reference such as `[JTA_Packages.sql:255-263](Demo_GC_Usage/03Development_Zone/Oracle_Package/JTA_Packages.sql#L255-L263)` that points to the relevant lines in the package (workspace-relative path).
     ----
     # #3 Body Script of *PROCEDURE_NAME()*
     ```
